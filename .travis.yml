@@ -20,3 +20,8 @@ env:
 install:
   - composer require symfony/symfony:${SYMFONY_VERSION}
   - composer install --no-interaction
+
+before_install:
+  - pip install --user codecov
+after_success:
+  - codecov
