@@ -1,0 +1,37 @@
+services:
+#    vss_o_auth_extension.example:
+#        class: Vss\OAuthExtensionBundle\Example
+#        arguments: ["@service_id", "plain_value", %parameter%]
+
+    vss_oauth_extension.grant.role:
+        class: Vss\OAuthExtensionBundle\Grant\RoleGrant
+        arguments: ["@fos_oauth_server.storage.default", "@security.role_hierarchy"]
+        tags:
+              - { name: fos_oauth_server.grant_extension, uri: 'http://oauth.vss.com/grants/role' }
+
+    vss_oauth.security.utils.browser_manager:
+        class: Vss\OAuthExtensionBundle\Security\Utils\BrowserManager
+
+    vss_oauth.security.utils.config_provider:
+        class: Vss\OAuthExtensionBundle\Security\Utils\ConfigProvider
+        arguments: ["@service_container", "@router"]
+
+    vss_oauth.security.auth.role.provider:
+        class: Vss\OAuthExtensionBundle\Security\RoleAuth\RoleTokenProvider
+        arguments: ["@vss_oauth.security.utils.browser_manager"]
+
+    vss_oauth.security.auth.role.admin:
+        class: Vss\OAuthExtensionBundle\Security\RoleAuth\RoleAuthenticator
+        arguments: ["ROLE_ADMIN", "@vss_oauth.security.auth.role.provider", "@vss_oauth.security.utils.config_provider"]
+
+    vss_oaut.security.expired_listener:
+        class: Vss\OAuthExtensionBundle\Security\Listener\ExpiredListener
+        arguments: ["@security.token_storage", "@vss_oauth.security.utils.config_provider"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.request }
+
+    vss_oaut.security.kernel_response_listener:
+        class: Vss\OAuthExtensionBundle\Security\Listener\KernelResponseListener
+        arguments: ["@security.token_storage"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response }

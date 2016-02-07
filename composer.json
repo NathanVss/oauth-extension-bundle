@@ -1,0 +1,27 @@
+{
+    "name": "vss/oauth-extension-bundle",
+    "description": "OAuth Extension for FOSOAuthServerBundle",
+    "type": "symfony2-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Nathan",
+            "email": "nathan.vasse@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.9",
+        "symfony/symfony": "2.*",
+        "friendsofsymfony/oauth-server-bundle": "dev-master",
+        "sensio/buzz-bundle":"dev-master"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.1.*"
+    },
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Vss\\OAuthExtensionBundle\\": ""
+        }
+    }
+}
