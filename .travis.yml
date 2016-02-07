@@ -12,6 +12,7 @@ phpunit: phpunit
 matrix:
   allow_failures:
     - php: hhvm
+    - php: '5.4'
 
 env:
   - SYMFONY_VERSION="2.8.*"
