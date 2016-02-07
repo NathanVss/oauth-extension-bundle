@@ -15,9 +15,6 @@
         "friendsofsymfony/oauth-server-bundle": "dev-master",
         "sensio/buzz-bundle":"dev-master"
     },
-    "require-dev": {
-        "phpunit/phpunit": "5.1.*"
-    },
     "minimum-stability": "dev",
     "autoload": {
         "psr-4": {
