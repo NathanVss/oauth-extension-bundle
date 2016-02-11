@@ -61,6 +61,15 @@ auth:
         client_secret: "client_secret"
         endpoint: "/token"
         logout_path: "logout_path"
+providers:
+    facebook1:
+        type: facebook
+        client_id: 373737
+        client_secret: 737373
+        redirect_uri: http://localhost
+providers_options:
+    fosub: true
+    user_manager: vss_oauth_extension.fosub.user_manager
 EOF;
         $parser = new Parser();
 

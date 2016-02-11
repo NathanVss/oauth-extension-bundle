@@ -1,13 +1,40 @@
+parameters:
+
+    vss_oauth_extension.providers.generic.oauth2.class:
+        Vss\OAuthExtensionBundle\Providers\GenericOAuth2Provider
+
+    vss_oauth_extension.providers.facebook.class:
+        Vss\OAuthExtensionBundle\Providers\FacebookProvider
+
 services:
-#    vss_o_auth_extension.example:
-#        class: Vss\OAuthExtensionBundle\Example
-#        arguments: ["@service_id", "plain_value", %parameter%]
+
+    vss_oauth_extension.providers.generic.oauth2:
+        class: %vss_oauth_extension.providers.generic.oauth2.class%
+        abstract: true
+        arguments:
+            - "@vss_oauth.security.utils.browser_manager"
+            - {}
+            - ""
+
+    vss_oauth_extension.fosub.user_manager.def:
+        class: Vss\OAuthExtensionBundle\Security\OAuth\OAuthFOSUBManager
+        abstract: true
+
+    vss_oauth_extension.oauth_manager:
+        class: Vss\OAuthExtensionBundle\Security\OAuth\OAuthManager
+        arguments: ["@service_container", "@doctrine.orm.entity_manager"]
 
     vss_oauth_extension.grant.role:
         class: Vss\OAuthExtensionBundle\Grant\RoleGrant
         arguments: ["@fos_oauth_server.storage.default", "@security.role_hierarchy"]
         tags:
               - { name: fos_oauth_server.grant_extension, uri: 'http://oauth.vss.com/grants/role' }
+
+    vss_oauth_extension.grant.provider:
+        class: Vss\OAuthExtensionBundle\Grant\ProviderGrant
+        arguments: ["@vss_oauth_extension.oauth_manager", "@vss_oauth_extension.providers_utils.user_manager"]
+        tags:
+              - { name: fos_oauth_server.grant_extension, uri: 'http://oauth.vss.com/grants/provider' }
 
     vss_oauth.security.utils.browser_manager:
         class: Vss\OAuthExtensionBundle\Security\Utils\BrowserManager

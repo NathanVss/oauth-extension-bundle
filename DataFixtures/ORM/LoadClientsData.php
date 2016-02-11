@@ -43,13 +43,14 @@ class LoadClientsData implements FixtureInterface, ContainerAwareInterface
 
         $client = $clientManager->createClient();
         $client->setRedirectUris([""]);
-        $client->setAllowedGrantTypes(["http://buddyvote.fr/grants/facebook", "password", "refresh_token"]);
-
+        $client->setAllowedGrantTypes(["http://oauth.vss.com/grants/provider", "password", "refresh_token"]);
 
         $client->setRandomId("client");
         $client->setSecret("notsecret");
         $client->setId(1);
         $clientManager->updateClient($client);
+
+
 
     }
 }
