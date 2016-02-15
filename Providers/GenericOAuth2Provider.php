@@ -86,7 +86,7 @@ abstract class GenericOAuth2Provider implements OAuth2ProviderInterface
     protected function handleUserInformationsResponse(Response $response) {
 
         if ($response->getStatusCode() != 200) {
-            throw FailedToGetUserInfoException(sprintf("Failed to get user informations for provider %s.",
+            throw new FailedToGetUserInfoException(sprintf("Failed to get user informations for provider %s.",
                 $this->name));
         }
 
@@ -130,8 +130,8 @@ abstract class GenericOAuth2Provider implements OAuth2ProviderInterface
 
         $data = json_decode($response->getContent(), true);
         if (!$data) {
-            throw new FailExchangeCodeException(sprintf("Failed to exchange code for a access token for provider %s. Can't read response.",
-                $this->name));
+            throw new FailExchangeCodeException(sprintf("Failed to exchange code for a access token for provider %s. Can't read response : %s",
+                $this->name, $response->getContent()));
         }
 
         return $this->buildCodeResponse($data);
@@ -173,6 +173,14 @@ abstract class GenericOAuth2Provider implements OAuth2ProviderInterface
         ];
 
         return $params;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
