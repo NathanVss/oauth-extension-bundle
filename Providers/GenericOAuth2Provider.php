@@ -23,22 +23,22 @@ abstract class GenericOAuth2Provider implements OAuth2ProviderInterface
     /**
      * @var array
      */
-    private $format;
+    protected $format;
 
     /**
      * @var array
      */
-    private $options;
+    protected $options;
 
     /**
      * @var string
      */
-    private $name;
+    protected $name;
 
     /**
      * @var BrowserManager
      */
-    private $browserManager;
+    protected $browserManager;
 
     /**
      * GenericOAuth2Provider constructor.
@@ -105,11 +105,11 @@ abstract class GenericOAuth2Provider implements OAuth2ProviderInterface
     /**
      * @inheritdoc
      */
-    public function getTokenFromCode($code) {
+    public function getTokenFromCode($code, $redirectUri, array $inputData = array()) {
 
         $browser = $this->browserManager->getBrowser();
 
-        $params = $this->buildCodeParams($code);
+        $params = $this->buildCodeParams($code, $redirectUri);
 
         $response = $browser->get($this->options['token_url'] . '?' . http_build_query($params));
 
@@ -161,14 +161,15 @@ abstract class GenericOAuth2Provider implements OAuth2ProviderInterface
 
     /**
      * @param $code
+     * @param $redirectUri
      * @return array
      */
-    protected function buildCodeParams($code) {
+    protected function buildCodeParams($code, $redirectUri) {
 
         $params = [
             $this->format['clientId'] => $this->options['client_id'],
             $this->format['clientSecret'] => $this->options['client_secret'],
-            $this->format['redirectUri'] => $this->options['redirect_uri'],
+            $this->format['redirectUri'] => $redirectUri,
             $this->format['code'] => $code,
         ];
 
@@ -192,7 +193,6 @@ abstract class GenericOAuth2Provider implements OAuth2ProviderInterface
         $optionsResolver->setRequired([
             'client_id',
             'client_secret',
-            'redirect_uri',
             'token_url',
             'user_url'
         ]);

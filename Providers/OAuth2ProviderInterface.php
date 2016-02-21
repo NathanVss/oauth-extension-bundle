@@ -17,9 +17,11 @@ interface OAuth2ProviderInterface
 
     /**
      * @param string $code
+     * @param $redirectUri
+     * @param array $inputData
      * @return array
      */
-    public function getTokenFromCode($code);
+    public function getTokenFromCode($code, $redirectUri, array $inputData = array());
 
     /**
      * @param $token

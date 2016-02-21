@@ -15,6 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class FacebookProvider extends GenericOAuth2Provider
 {
+
     protected function setupOptions(OptionsResolver $optionsResolver) {
 
         parent::setupOptions($optionsResolver);

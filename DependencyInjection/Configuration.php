@@ -60,7 +60,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('type')->isRequired()->end()
                             ->scalarNode('client_id')->isRequired()->end()
                             ->scalarNode('client_secret')->isRequired()->end()
-                            ->scalarNode('redirect_uri')->isRequired()->end()
+                            ->scalarNode('redirect_uri')->end()
                         ->end()
                     ->end()
                 ->end()

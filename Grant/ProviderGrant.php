@@ -58,9 +58,13 @@ class ProviderGrant implements GrantExtensionInterface
         if (!isset($inputData['provider'])) {
             throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'No "provider" parameter found');
         }
+        if (!isset($inputData['redirect_uri'])) {
+            throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'No "redirect_uri" parameter found');
+        }
 
         $providerName = $inputData['provider'];
         $code = $inputData['code'];
+        $redirectUri = $inputData['redirect_uri'];
 
         try {
             $provider = $this->oauthManager->getProvider($providerName);
@@ -69,7 +73,7 @@ class ProviderGrant implements GrantExtensionInterface
         }
 
         try {
-            $tokenData = $provider->getTokenFromCode($code);
+            $tokenData = $provider->getTokenFromCode($code, $redirectUri, $inputData);
         } catch (FailExchangeCodeException $e) {
             throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, "Failed to exchange code : {$e->getMessage()}");
         }
