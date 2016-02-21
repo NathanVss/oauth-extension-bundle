@@ -70,6 +70,8 @@ class VssOAuthExtensionExtension extends Extension
         $type = $options['type'];
         unset($options['type']);
 
+        $container->setParameter("vss_oauth_extension.providers.$name.client_id", $options['client_id']);
+
         $definition = new DefinitionDecorator('vss_oauth_extension.providers.generic.oauth2');
         $definition->setClass("%vss_oauth_extension.providers.$type.class%");
         $container->setDefinition('vss_oauth_extension.providers.'.$name, $definition);
