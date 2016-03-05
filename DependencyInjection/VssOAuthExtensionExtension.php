@@ -23,7 +23,6 @@ class VssOAuthExtensionExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-
         // must be set if oauth providers are used
         if (isset($config['providers_options']['user_manager'])) {
             $container->setAlias('vss_oauth_extension.providers_utils.user_manager', $config['providers_options']['user_manager']);

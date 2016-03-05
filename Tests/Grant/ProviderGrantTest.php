@@ -86,7 +86,8 @@ class ProviderGrantTest extends \PHPUnit_Framework_TestCase
 
         $input = [
             'code' => 'code',
-            'provider' => 'lul'
+            'provider' => 'lul',
+            'redirect_uri' => 'http://localhost/'
         ];
         $providerGrant->checkGrantExtension($this->getClientMock(), $input, []);
 
@@ -121,7 +122,8 @@ class ProviderGrantTest extends \PHPUnit_Framework_TestCase
 
         $input = [
             'code' => 'code',
-            'provider' => 'lul'
+            'provider' => 'lul',
+            'redirect_uri' => 'http://localhost/'
         ];
         $providerGrant->checkGrantExtension($this->getClientMock(), $input, []);
 
@@ -159,7 +161,8 @@ class ProviderGrantTest extends \PHPUnit_Framework_TestCase
 
         $input = [
             'code' => 'code',
-            'provider' => 'lul'
+            'provider' => 'lul',
+            'redirect_uri' => 'http://localhost/'
         ];
         $providerGrant->checkGrantExtension($this->getClientMock(), $input, []);
 
@@ -209,7 +212,8 @@ class ProviderGrantTest extends \PHPUnit_Framework_TestCase
 
         $input = [
             'code' => 'code',
-            'provider' => 'facebook'
+            'provider' => 'facebook',
+            'redirect_uri' => 'http://mywebsite.com/'
         ];
         $output = $providerGrant->checkGrantExtension($this->getClientMock(), $input, []);
 

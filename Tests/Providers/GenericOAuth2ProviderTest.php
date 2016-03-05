@@ -25,8 +25,7 @@ class GenericOAuth2ProviderTest extends \PHPUnit_Framework_TestCase
 
         $options = [
             'client_id' => 'me',
-            'client_secret' => 'secret',
-            'redirect_uri' => 'http://localhost/',
+            'client_secret' => 'secret'
         ];
 
         $provider = new AcmeProvider($browserManager, $options, 'acme');
@@ -184,7 +183,7 @@ class GenericOAuth2ProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getStatusCode')
             ->willReturn(500);
 
-        $params = $provider->getTokenFromCode('code');
+        $params = $provider->getTokenFromCode('code', 'http://localhost/');
     }
     public function testGetTokenFromCodeCantReadResponse() {
         $this->setExpectedException('Vss\OAuthExtensionBundle\Providers\Exception\FailExchangeCodeException');
@@ -217,7 +216,7 @@ class GenericOAuth2ProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getContent')
             ->willReturn('[this in not json]');
 
-        $params = $provider->getTokenFromCode('code');
+        $params = $provider->getTokenFromCode('code', 'http://localhost');
     }
 
     public function testGetTokenFromCodeValidResponse() {
@@ -256,7 +255,7 @@ class GenericOAuth2ProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getContent')
             ->willReturn(json_encode($content));
 
-        $params = $provider->getTokenFromCode('code');
+        $params = $provider->getTokenFromCode('code', 'http://localhost');
 
         // Params names are converted to universal ones due to $format attribute ( access_token => accessToken )
         $this->assertTrue($params['accessToken'] == 'trolol');
