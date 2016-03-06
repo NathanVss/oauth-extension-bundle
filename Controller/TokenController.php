@@ -34,12 +34,12 @@ class TokenController extends Controller
     public function tokenAction(Request $request)
     {
 
-        if (strstr($request->getContentType(), "json")) {
-            $jsonParsed = json_decode($request->getContent(), true);
-            if ($jsonParsed) {
-                $request->request->add($jsonParsed);
-            }
-        }
+//        if (strstr($request->getContentType(), "json")) {
+//            $jsonParsed = json_decode($request->getContent(), true);
+//            if ($jsonParsed) {
+//                $request->request->add($jsonParsed);
+//            }
+//        }
         try {
             return $this->get('fos_oauth_server.server')->grantAccessToken($request);
         } catch (OAuth2ServerException $e) {

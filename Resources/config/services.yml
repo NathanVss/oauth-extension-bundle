@@ -24,6 +24,17 @@ services:
         class: Vss\OAuthExtensionBundle\Security\OAuth\OAuthManager
         arguments: ["@service_container", "@doctrine.orm.entity_manager"]
 
+    vss_oauth_extension.grant.email:
+        class: Vss\OAuthExtensionBundle\Grant\EmailGrant
+        arguments:
+            - "@fos_oauth_server.storage.default"
+            - "@fos_user.user_provider.username_email"
+            - "@security.encoder_factory"
+        tags:
+              - { name: fos_oauth_server.grant_extension, uri: 'http://oauth.vss.com/grants/email' }
+
+
+
     vss_oauth_extension.grant.role:
         class: Vss\OAuthExtensionBundle\Grant\RoleGrant
         arguments: ["@fos_oauth_server.storage.default", "@security.role_hierarchy"]
