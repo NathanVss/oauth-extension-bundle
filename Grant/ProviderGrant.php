@@ -52,8 +52,8 @@ class ProviderGrant implements GrantExtensionInterface
     public function checkGrantExtension(IOAuth2Client $client, array $inputData, array $authHeaders)
     {
 
-        if (!isset($inputData['code'])) {
-            throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'No "code" parameter found');
+        if (!(isset($inputData['code']) || isset($inputData['access_token']))) {
+            throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'No "code" or "access_token" parameter found');
         }
         if (!isset($inputData['provider'])) {
             throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'No "provider" parameter found');
@@ -63,8 +63,9 @@ class ProviderGrant implements GrantExtensionInterface
         }
 
         $providerName = $inputData['provider'];
-        $code = $inputData['code'];
+        $code = isset($inputData['code']) ? $inputData['code'] : null;
         $redirectUri = $inputData['redirect_uri'];
+        $accessToken = isset($inputData['access_token']) ? $inputData['access_token'] : null;
 
         try {
             $provider = $this->oauthManager->getProvider($providerName);
@@ -72,11 +73,18 @@ class ProviderGrant implements GrantExtensionInterface
             throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, "The provider $providerName does not exists.");
         }
 
-        try {
-            $tokenData = $provider->getTokenFromCode($code, $redirectUri, $inputData);
-        } catch (FailExchangeCodeException $e) {
-            throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, "Failed to exchange code : {$e->getMessage()}");
+        if ($accessToken) {
+            $tokenData = [
+                'accessToken' => $accessToken
+            ];
+        } else {
+            try {
+                $tokenData = $provider->getTokenFromCode($code, $redirectUri, $inputData);
+            } catch (FailExchangeCodeException $e) {
+                throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, "Failed to exchange code : {$e->getMessage()}");
+            }
         }
+
 
         try {
             $userInfo = $provider->getUserInformations($tokenData['accessToken']);
