@@ -44,12 +44,21 @@ class OAuthFOSUBManager implements OAuthUserManagerInterface
 
         $field = $providerName . 'Id';
         if ($user = $this->userManager->findUserBy([$field => $data['id']])) {
+
+            if (isset($data['data']['email'])) {
+                $user->setEmail($data['data']['email']);
+            }
             return $user;
+        }
+        if (isset($data['data']['email'])) {
+            $user->setEmail($data['data']['email']);
         }
 
         $user = $this->userManipulator->create($data['data']['name'], 'secret', '', true, false);
         $setter = "set" . ucfirst($providerName) . 'Id';
         $user->$setter($data['id']);
+
+
         $this->userManager->updateUser($user);
 
         return $user;

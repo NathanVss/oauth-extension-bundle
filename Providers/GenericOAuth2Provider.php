@@ -72,7 +72,6 @@ abstract class GenericOAuth2Provider implements OAuth2ProviderInterface
         $params = [
             $this->format['token'] => $accessToken
         ];
-
         $response = $browser->get($this->options['user_url'] . '?' . http_build_query($params));
 
         return $this->handleUserInformationsResponse($response);

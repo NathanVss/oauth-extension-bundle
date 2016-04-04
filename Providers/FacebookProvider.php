@@ -16,6 +16,22 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class FacebookProvider extends GenericOAuth2Provider
 {
 
+    /**
+     * @inheritdoc
+     */
+    public function getUserInformations($accessToken) {
+
+        $browser = $this->browserManager->getBrowser();;
+
+        $params = [
+            $this->format['token'] => $accessToken,
+            'fields' => 'id,name,email'
+        ];
+        $response = $browser->get($this->options['user_url'] . '?' . http_build_query($params));
+
+        return $this->handleUserInformationsResponse($response);
+    }
+
     protected function setupOptions(OptionsResolver $optionsResolver) {
 
         parent::setupOptions($optionsResolver);
