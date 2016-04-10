@@ -10,6 +10,7 @@ use FOS\OAuthServerBundle\Storage\OAuthStorage;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 use FOS\UserBundle\Security\EmailUserProvider;
+use Vss\OAuthExtensionBundle\Security\Utils\EmailProvider;
 
 /**
  * Class EmailGrant
@@ -17,14 +18,8 @@ use FOS\UserBundle\Security\EmailUserProvider;
  */
 class EmailGrant implements GrantExtensionInterface
 {
-
     /**
-     * @var OAuthStorage
-     */
-    private $storage;
-
-    /**
-     * @var EmailUserProvider
+     * @var EmailProvider
      */
     private $userProvider;
 
@@ -35,14 +30,11 @@ class EmailGrant implements GrantExtensionInterface
 
     /**
      * RoleGrant constructor.
-     * @param OAuthStorage $storage
-     * @param EmailUserProvider $userProvider
+     * @param EmailProvider $userProvider
      * @param EncoderFactoryInterface $encoderFactory
      */
-    public function __construct(OAuthStorage $storage, EmailUserProvider $userProvider,
-        EncoderFactoryInterface $encoderFactory) {
+    public function __construct(EmailProvider $userProvider, EncoderFactoryInterface $encoderFactory) {
 
-        $this->storage = $storage;
         $this->userProvider = $userProvider;
         $this->encoderFactory = $encoderFactory;
     }
@@ -53,7 +45,6 @@ class EmailGrant implements GrantExtensionInterface
      */
     public function checkGrantExtension(IOAuth2Client $client, array $inputData, array $authHeaders)
     {
-
         if (!isset($inputData['email'])) {
             throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'No "email" parameter found');
         }
@@ -64,9 +55,7 @@ class EmailGrant implements GrantExtensionInterface
         $email = $inputData['email'];
         $password = $inputData['password'];
 
-        // FOSUB required know.
-        $user = $this->userProvider->loadUserByUsername($email);
-
+        $user = $this->userProvider->loadByEmail($email);
 
         if (null === $user) {
             return false;

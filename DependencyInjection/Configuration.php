@@ -23,12 +23,6 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('providers_options')
-                    ->children()
-                        ->scalarNode('fosub')->defaultFalse()->end()
-                        ->scalarNode('user_manager')->isRequired()->end()
-                    ->end()
-                ->end()
                 ->arrayNode('auth')
                     ->prototype('array')
                         ->children()

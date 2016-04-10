@@ -23,10 +23,6 @@ class VssOAuthExtensionExtension extends Extension
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
-        // must be set if oauth providers are used
-        if (isset($config['providers_options']['user_manager'])) {
-            $container->setAlias('vss_oauth_extension.providers_utils.user_manager', $config['providers_options']['user_manager']);
-        }
 
         // client side authentication
         if (isset($config['auth'])) {
@@ -44,15 +40,6 @@ class VssOAuthExtensionExtension extends Extension
             foreach ($config['providers'] as $name => $options) {
                 $this->setupProviderService($container, $name, $options);
             }
-        }
-
-        // FOSUB integration
-        if (isset($config['providers_options']['fosub'])) {
-
-            $container->setDefinition('vss_oauth_extension.fosub.user_manager', new DefinitionDecorator('vss_oauth_extension.fosub.user_manager.def'))
-                ->addArgument(new Reference('fos_user.util.user_manipulator'))
-                ->addArgument(new Reference('fos_user.user_manager.default'));
-
         }
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
