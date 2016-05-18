@@ -10,6 +10,7 @@ namespace Vss\OAuthExtensionBundle\Security\Listener;
 
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Vss\OAuthExtensionBundle\Security\EmailAuth\EmailToken;
 use Vss\OAuthExtensionBundle\Security\RoleAuth\Token\RoleToken;
 
 class KernelResponseListener
@@ -33,7 +34,7 @@ class KernelResponseListener
             return;
         }
         $token = $this->tokenStorage->getToken();
-        if (!($token instanceof RoleToken)) {
+        if (!($token instanceof RoleToken || $token instanceof EmailToken)) {
             return;
         }
         $accessToken = $token->getAccessToken();

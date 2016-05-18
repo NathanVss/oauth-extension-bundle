@@ -56,6 +56,18 @@ services:
         class: Vss\OAuthExtensionBundle\Security\Utils\ConfigProvider
         arguments: ["@service_container", "@router"]
 
+
+
+    vss_oauth.security.auth.email.provider:
+        class: Vss\OAuthExtensionBundle\Security\EmailAuth\EmailTokenProvider
+        arguments: ["@vss_oauth.security.utils.browser_manager"]
+
+    vss_oauth.security.auth.email:
+        class: Vss\OAuthExtensionBundle\Security\EmailAuth\EmailAuthenticator
+        arguments: ["@vss_oauth.security.auth.email.provider", "@vss_oauth.security.utils.config_provider"]
+
+
+
     vss_oauth.security.auth.role.provider:
         class: Vss\OAuthExtensionBundle\Security\RoleAuth\RoleTokenProvider
         arguments: ["@vss_oauth.security.utils.browser_manager"]

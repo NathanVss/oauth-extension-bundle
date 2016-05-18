@@ -27,6 +27,7 @@ class Configuration implements ConfigurationInterface
                     ->prototype('array')
                         ->children()
                             ->scalarNode('client_id')->isRequired()->end()
+                            ->scalarNode('grant')->end()
                             ->scalarNode('client_secret')->isRequired()->end()
                             ->scalarNode('endpoint')->isRequired()->end()
                             ->scalarNode('logout_path')->isRequired()->end()

@@ -16,8 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Routing\Router;
  * Class ConfigProvider
  * @package Vss\OAuthExtensionBundle\Security\Utils
  */
-class ConfigProvider
-{
+class ConfigProvider {
 
     /**
      * @var ContainerInterface
@@ -36,6 +35,24 @@ class ConfigProvider
     public function __construct(ContainerInterface $container, Router $router) {
         $this->container = $container;
         $this->router = $router;
+    }
+
+    /**
+     * @return array
+     */
+    public function getEmailConfig() {
+        $prefix = "vss_oauth_extension.auth.email";
+        if (!$this->container->getParameter("$prefix.client_id")) {
+            throw new InvalidConfigurationException("No $prefix node configured.");
+        }
+
+        return [
+            'grant' => $this->container->getParameter("$prefix.grant"),
+            'client_id' => $this->container->getParameter("$prefix.client_id"),
+            'client_secret' => $this->container->getParameter("$prefix.client_secret"),
+            'endpoint' => $this->container->getParameter("$prefix.endpoint"),
+            'logout_path' => $this->router->generate($this->container->getParameter("$prefix.logout_path"))
+        ];
     }
 
     /**
