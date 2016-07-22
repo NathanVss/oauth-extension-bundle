@@ -4,6 +4,7 @@ namespace Vss\OAuthExtensionBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -26,12 +27,8 @@ class VssOAuthExtensionExtension extends Extension
 
         // client side authentication
         if (isset($config['auth'])) {
-            $prefix = "vss_oauth_extension.auth";
             foreach ($config['auth'] as $name => $auth) {
-                $prefix .= ".$name";
-                foreach ($auth as $key => $value) {
-                    $container->setParameter($prefix . ".$key", $value);
-                }
+                $this->setupAuthentication($container, $name, $auth);
             }
         }
 
@@ -44,6 +41,16 @@ class VssOAuthExtensionExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+    }
+
+    public function setupAuthentication(ContainerInterface $container, $name, $options) {
+        $container->setParameter("vss_oauth_extension.providers.$name.client_id", $options['client_id']);
+
+        $definition = new DefinitionDecorator("vss_oauth.security.auth.{$options['type']}");
+        $container->setDefinition("vss_oauth.security.auth.email.$name", $definition);
+        $definition
+            ->replaceArgument(0, $options)
+        ;
     }
 
     /**

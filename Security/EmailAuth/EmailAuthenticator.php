@@ -30,19 +30,18 @@ class EmailAuthenticator implements SimpleFormAuthenticatorInterface {
     private $emailTokenProvider;
 
     /**
-     * @var ConfigProvider
+     * @var array
      */
-    private $configProvider;
+    private $config;
 
     /**
      * EmailAuthenticator constructor.
      * @param EmailTokenProvider $emailTokenProvider
-     * @param ConfigProvider $configProvider
      * @internal param RoleTokenProvider $roleTokenProvider
      */
-    public function __construct(EmailTokenProvider $emailTokenProvider, ConfigProvider $configProvider) {
+    public function __construct(array $config, EmailTokenProvider $emailTokenProvider) {
+        $this->config = $config;
         $this->emailTokenProvider = $emailTokenProvider;
-        $this->configProvider = $configProvider;
     }
 
     /**
@@ -54,17 +53,15 @@ class EmailAuthenticator implements SimpleFormAuthenticatorInterface {
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey) {
         $user = $userProvider->loadUserByUsername($token->getUsername());
 
-        $config = $this->configProvider->getEmailConfig();
-
         $params = [
-            "client_id" => $config['client_id'],
-            "client_secret" => $config['client_secret'],
+            "client_id" => $this->config['client_id'],
+            "client_secret" => $this->config['client_secret'],
             "email" => $token->getUsername(),
             "password" => $token->getCredentials()
         ];
 
         try {
-            $storage = $this->emailTokenProvider->authentificate($config['endpoint'], $params, $config['grant']);
+            $storage = $this->emailTokenProvider->authentificate($this->config['endpoint'], $params, $this->config['grant']);
         } catch (BadAuthentificationException $e) {
             // CAUTION: this message will be returned to the client
             // (so don't put any un-trusted messages / error strings here)

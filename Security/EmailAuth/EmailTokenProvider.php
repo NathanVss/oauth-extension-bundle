@@ -75,6 +75,7 @@ class EmailTokenProvider
         $params['grant_type'] = $grant;
 
         $response = $browser->get($endpoint . '?' . http_build_query($params));
+        
 
         try {
             $data = $this->handleResponse($response);

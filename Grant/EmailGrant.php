@@ -28,6 +28,10 @@ class EmailGrant implements GrantExtensionInterface
      */
     private $encoderFactory;
 
+    const ERROR_LOCKED = "UserLocked";
+    const ERROR_INVALID_PASSWORD = "InvalidPassword";
+    const ERROR_UNKNOWN_USER = "UnknownUser";
+
     /**
      * RoleGrant constructor.
      * @param EmailProvider $userProvider
@@ -45,6 +49,7 @@ class EmailGrant implements GrantExtensionInterface
      */
     public function checkGrantExtension(IOAuth2Client $client, array $inputData, array $authHeaders)
     {
+
         if (!isset($inputData['email'])) {
             throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, OAuth2::ERROR_INVALID_REQUEST, 'No "email" parameter found');
         }
@@ -58,16 +63,25 @@ class EmailGrant implements GrantExtensionInterface
         $user = $this->userProvider->loadByEmail($email);
 
         if (null === $user) {
-            return false;
+            throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, self::ERROR_UNKNOWN_USER, 'User not found.');
         }
 
         $encoder = $this->encoderFactory->getEncoder($user);
 
+
         if ($encoder->isPasswordValid($user->getPassword(), $password, $user->getSalt())) {
+
+            if (method_exists($user, 'isLocked')) {
+
+                if ($user->isLocked()) {
+                    throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, self::ERROR_LOCKED, "User is locked.");
+                }
+            }
+
             return array(
                 'data' => $user,
             );
         }
-        return false;
+        throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, self::ERROR_INVALID_PASSWORD, 'Password is not valid.');
     }
 }

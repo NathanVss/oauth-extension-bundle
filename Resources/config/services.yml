@@ -64,7 +64,9 @@ services:
 
     vss_oauth.security.auth.email:
         class: Vss\OAuthExtensionBundle\Security\EmailAuth\EmailAuthenticator
-        arguments: ["@vss_oauth.security.auth.email.provider", "@vss_oauth.security.utils.config_provider"]
+        abstract: true
+#        arguments: ["@vss_oauth.security.auth.email.provider", "@vss_oauth.security.utils.config_provider"]
+        arguments: ["", "@vss_oauth.security.auth.email.provider"]
 
 
 
