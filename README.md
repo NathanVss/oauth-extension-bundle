@@ -9,6 +9,10 @@ VssOAuthExtensionBundle
 
 ## Documentation
 
+### Introduction
+
+This bundle extends the features of the `friendsofsymfony/oauth-server-bundle` ( https://github.com/FriendsOfSymfony/FOSOAuthServerBundle/blob/master/Resources/doc/index.md ).
+
 ### Grants
 
 #### Email Grant
