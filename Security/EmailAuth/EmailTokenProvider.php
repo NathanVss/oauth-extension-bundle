@@ -76,7 +76,6 @@ class EmailTokenProvider
 
         $response = $browser->get($endpoint . '?' . http_build_query($params));
         
-
         try {
             $data = $this->handleResponse($response);
         } catch (BadAuthentificationException $e) {

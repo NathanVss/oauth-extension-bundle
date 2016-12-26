@@ -52,7 +52,7 @@ class EmailAuthenticator implements SimpleFormAuthenticatorInterface {
      */
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey) {
         $user = $userProvider->loadUserByUsername($token->getUsername());
-
+        
         $params = [
             "client_id" => $this->config['client_id'],
             "client_secret" => $this->config['client_secret'],

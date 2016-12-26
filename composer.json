@@ -10,9 +10,9 @@
         }
     ],
     "require": {
-        "php": ">=5.3.9",
-        "symfony/symfony": "2.*",
-        "friendsofsymfony/oauth-server-bundle": "dev-master",
+        "php": ">=5.5.9",
+        "symfony/symfony": "3.2.*",
+        "friendsofsymfony/oauth-server-bundle": "^1.5",
         "sensio/buzz-bundle":"dev-master",
         "friendsofsymfony/user-bundle": "~2.0@dev"
     },
