@@ -13,7 +13,7 @@
         "php": ">=5.5.9",
         "symfony/symfony": "3.2.*",
         "friendsofsymfony/oauth-server-bundle": "^1.5",
-        "sensio/buzz-bundle":"dev-master",
+        "sensio/buzz-bundle":"^1.1",
         "friendsofsymfony/user-bundle": "~2.0@dev"
     },
     "require-dev_": {
