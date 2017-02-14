@@ -31,6 +31,7 @@ class EmailGrant implements GrantExtensionInterface
     const ERROR_LOCKED = "UserLocked";
     const ERROR_INVALID_PASSWORD = "InvalidPassword";
     const ERROR_UNKNOWN_USER = "UnknownUser";
+    const ERROR_DISABLED = "DisabledUser";
 
     /**
      * RoleGrant constructor.
@@ -72,9 +73,13 @@ class EmailGrant implements GrantExtensionInterface
         if ($encoder->isPasswordValid($user->getPassword(), $password, $user->getSalt())) {
 
             if (method_exists($user, 'isLocked')) {
-
                 if ($user->isLocked()) {
                     throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, self::ERROR_LOCKED, "User is locked.");
+                }
+            }
+            if (method_exists($user, "isEnabled")) {
+                if (!$user->isEnabled()) {
+                    throw new OAuth2ServerException(OAuth2::HTTP_BAD_REQUEST, self::ERROR_DISABLED, "User is not enabled.");
                 }
             }
 
